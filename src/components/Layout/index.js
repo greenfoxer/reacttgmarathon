@@ -2,7 +2,6 @@ import styleComponent from './style.module.css'
 
 const Layout = ({title, descr, urlBg, colorBg}) => {
     const bgStyle = urlBg ? { backgroundImage : `url(${urlBg})`} : ( colorBg ? { backgroundColor : `${colorBg}`} : { background : 'None'});
-    console.log('#### bgStyle', bgStyle);
     return (
         <section className={styleComponent.root} style={bgStyle}>
             <div className={styleComponent.wrapper}>
