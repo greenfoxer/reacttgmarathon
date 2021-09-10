@@ -1,9 +1,13 @@
 import styleComponent from './style.module.css'
 
 const Layout = ({title, descr, urlBg, colorBg}) => {
-    const bgStyle = urlBg ? { backgroundImage : `url(${urlBg})`} : ( colorBg ? { backgroundColor : `${colorBg}`} : { background : 'None'});
+    const compositeBg =
+    {
+        backgroundImage : urlBg ? `url(${urlBg})` : "none",
+        backgroundColor : colorBg ? `${colorBg}` : "none"
+    }
     return (
-        <section className={styleComponent.root} style={bgStyle}>
+        <section className={styleComponent.root} style={compositeBg}>
             <div className={styleComponent.wrapper}>
                 <article>
                     <div className={styleComponent.title}> 
