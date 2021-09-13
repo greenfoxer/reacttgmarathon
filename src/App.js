@@ -21,7 +21,7 @@ const App = () =>{
       <Layout title="Pokemons" descr="My Layout Description 2" colorBg="SkyBlue">
         <div className="flex">
           {
-            POKEMONS.map(item => <PokemonCard key={item.id} {...item}/>)
+            POKEMONS.map(item => <PokemonCard key={item.id} id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}/>)
           }
         </div>
       </Layout>
