@@ -8,6 +8,7 @@ import PokemonCard from './../../components/PokemonCard';
 import BgImage from './../../Assets/bg3.jpg';
 
 import POKEMONS from './../../PokeDB.json';
+import MenuHeader from '../../components/MenuHeader';
 
 const HomePage = ({onPageChange}) =>{
   const  handleClickButton = (page) => {
@@ -15,10 +16,10 @@ const HomePage = ({onPageChange}) =>{
   };
   return (
     <React.Fragment>
-      <Header 
-            title="Pokemon Card Game Project" 
-            descr="My first React application"
-            onClickButton={handleClickButton}/>
+      <MenuHeader />
+      <Header title="Pokemon Card Game Project" 
+              descr="My first React application"
+              onClickButton={handleClickButton}/>
       <Layout title="Rules" descr="My Layout Description 1" urlBg={BgImage}>
         <p>In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.</p>
         <p>Each player has five cards in a hand and the aim is to capture the opponent's cards by turning them into the player's own color of red or blue.</p>
