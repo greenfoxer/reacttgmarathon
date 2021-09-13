@@ -1,4 +1,5 @@
 import styleComponent from './style.module.css'
+import cn from 'classnames'
 
 const Layout = ({title, descr, urlBg, colorBg, children}) => {
     const compositeBg =
@@ -14,7 +15,7 @@ const Layout = ({title, descr, urlBg, colorBg, children}) => {
                         <h3>{title}</h3>
                         <span className={styleComponent.separator}></span>
                     </div>
-                    <div className={`${styleComponent.desc} ${styleComponent.full}`}>
+                    <div className={cn(styleComponent.desc, styleComponent.full)}>
                         {children ? children : descr}
                     </div>
                 </article>
