@@ -3,7 +3,7 @@ import Menu from "../Menu";
 import NavBar from "../NavBar";
 
 const MenuHeader = () => {
-    const [isMenuOpened, setMenuOpened] = useState(false);
+    const [isMenuOpened, setMenuOpened] = useState(undefined);
     const onMenuStateChange = () => {
         setMenuOpened(!isMenuOpened);
     }

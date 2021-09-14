@@ -7,7 +7,7 @@ const Menu = ({onMenuStateChange, isMenuShowed}) => {
         onMenuStateChange();
     }
     return(
-        <div className={cn(sComp.menuContainer, {[sComp.active] : isMenuShowed} , {[sComp.deactive] : !isMenuShowed})} onClick={onClickMenu}>
+        <div className={cn(sComp.menuContainer, {[sComp.active] : isMenuShowed === true} , {[sComp.deactive] : isMenuShowed === false})} onClick={onClickMenu}>
             <div className={sComp.overlay} />
             <div className={sComp.menuItems}>
                 <ul>
