@@ -9,6 +9,8 @@ const Header = ({title, descr, onClickButton}) => {
     return (
         <header className={styleComponent.root}>
             <div className={styleComponent.forest}></div>
+            <div className={styleComponent.silhouette}></div>
+            <div className={styleComponent.moon}></div>
             <div className={styleComponent.container}>
                 <h1>{title}</h1>
                 <p>{descr}</p>
