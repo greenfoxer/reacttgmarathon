@@ -12,7 +12,6 @@ const GamePage = ({onPageChange}) =>{
         history.push('/home');
     }
     const pickCard = (id) => {
-        console.log(id);
         setCards( (prevState) => {
             const newState = [...prevState];
             const mutation = newState.find(x => x.id === id);

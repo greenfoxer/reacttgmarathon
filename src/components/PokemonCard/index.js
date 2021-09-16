@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import cn from 'classnames'
 
 import styleComponent from './style.module.css'
 import CardBack from './../../Assets/card-back-side.jpg'
 
 const PokemonCard = ({id, name, type, img, values, isActive = false, pickCard}) => {
-    console.log('card',{id},'isactive',isActive);
     const handleCardClick =() =>{
         pickCard && pickCard(id);
     };
