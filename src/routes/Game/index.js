@@ -21,10 +21,12 @@ const GamePage = ({onPageChange}) =>{
             return Object.entries(prevState).reduce((acc, item) => {
                 const pokemon = {...item[1]};
                 if (pokemon.id === id) {
-                    console.log('#### poke: ',pokemon);
-                    pokemon.isActive = true;
+                    pokemon.isActive = !pokemon.isActive ;
+                    database.ref('pokemons/'+ item[0]).set({
+                        ...pokemon
+                    });
                 };
-        
+                
                 acc[item[0]] = pokemon;
         
                 return acc;
@@ -42,7 +44,7 @@ const GamePage = ({onPageChange}) =>{
         <Layout title="Pokemons" colorBg="SkyBlue">
             <div className="flex">
             {
-                Object.entries(cards).map(([key,item]) => <PokemonCard key={item.id} 
+                Object.entries(cards).map(([key,item]) => <PokemonCard key={key} 
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
                     pickCard={pickCard} isActive={item.isActive}
                     />)
