@@ -2,13 +2,11 @@ import React from 'react';
 
 import Header from './../../components/Header';
 import Layout from './../../components/Layout';
-import Footer from './../../components/Footer';
 import PokemonCard from './../../components/PokemonCard';
 
 import BgImage from './../../Assets/bg3.jpg';
 
 import POKEMONS from './../../PokeDB.json';
-import MenuHeader from '../../components/MenuHeader';
 
 const HomePage = ({onPageChange}) =>{
   const  handleClickButton = (page) => {
@@ -16,7 +14,6 @@ const HomePage = ({onPageChange}) =>{
   };
   return (
     <React.Fragment>
-      <MenuHeader />
       <Header title="Pokemon Card Game Project" 
               descr="My first React application"
               onClickButton={handleClickButton}/>
@@ -29,12 +26,11 @@ const HomePage = ({onPageChange}) =>{
       <Layout title="Pokemons" descr="My Layout Description 2" colorBg="SkyBlue">
         <div className="flex">
           {
-            POKEMONS.map(item => <PokemonCard key={item.id} id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}/>)
+            POKEMONS.map(item => <PokemonCard key={item.id} id={item.id} name={item.name} type={item.type} img={item.img} values={item.values} isActive={true}/>)
           }
         </div>
       </Layout>
       <Layout title="About" descr="One day..." urlBg={BgImage}/>
-      <Footer />
     </React.Fragment>
   );
 }
