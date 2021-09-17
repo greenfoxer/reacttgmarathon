@@ -1,30 +1,35 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useHistory } from "react-router-dom";
 import Layout from "../../components/Layout";
 import PokemonCard from "../../components/PokemonCard";
 
-import POKEMONS from '../../PokeDB.json';
+import database from '../../Services/firebase';
 
 const GamePage = ({onPageChange}) =>{
+    useEffect(() =>{
+        database.ref('pokemons').once('value', (snapshot) =>{
+            setCards(snapshot.val());
+        })
+    }, []);
     const history = useHistory();
-    const [cards, setCards] = useState(POKEMONS.slice(0,5));
+    const [cards, setCards] = useState({});
     const onClickButton = () =>{
         history.push('/home');
     }
     const pickCard = (id) => {
         setCards( (prevState) => {
-            const newState = [...prevState];
-            const mutation = newState.find(x => x.id === id);
-            const elNum = newState.indexOf(mutation);
-            if (mutation.isActive === undefined)
-            {
-                const redacted = {...mutation, isActive : true};
-                newState[elNum]=redacted;
-            }
-            else
-                mutation.isActive = !mutation.isActive;
-            return newState;
-        })
+            return Object.entries(prevState).reduce((acc, item) => {
+                const pokemon = {...item[1]};
+                if (pokemon.id === id) {
+                    console.log('#### poke: ',pokemon);
+                    pokemon.isActive = true;
+                };
+        
+                acc[item[0]] = pokemon;
+        
+                return acc;
+            }, {});
+        });
     }
     return(
         <React.Fragment>
@@ -37,7 +42,7 @@ const GamePage = ({onPageChange}) =>{
         <Layout title="Pokemons" colorBg="SkyBlue">
             <div className="flex">
             {
-                cards.map((item, index) => <PokemonCard key={index} 
+                Object.entries(cards).map(([key,item]) => <PokemonCard key={item.id} 
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
                     pickCard={pickCard} isActive={item.isActive}
                     />)
