@@ -1,20 +1,26 @@
 import React, {useState, useEffect} from 'react'
-import { useHistory } from "react-router-dom";
 import Layout from "../../components/Layout";
 import PokemonCard from "../../components/PokemonCard";
-
+import sComp from "./style.module.css";
 import database from '../../Services/firebase';
 
 const GamePage = ({onPageChange}) =>{
-    useEffect(() =>{
+    const updateCards = () => {
         database.ref('pokemons').once('value', (snapshot) =>{
             setCards(snapshot.val());
-        })
+        });
+    }
+    useEffect(() =>{
+        updateCards();
     }, []);
-    const history = useHistory();
     const [cards, setCards] = useState({});
     const onClickButton = () =>{
-        history.push('/home');
+        const objArr = Object.entries(cards);
+        const randomPokemon = objArr[Math.floor(Math.random()*objArr.length)][1];
+        randomPokemon.isActive=false;
+        const newKey = database.ref().child('pokemons').push().key;
+        database.ref('pokemons/' + newKey).set(randomPokemon);
+        updateCards();
     }
     const pickCard = (id) => {
         setCards( (prevState) => {
@@ -35,10 +41,9 @@ const GamePage = ({onPageChange}) =>{
     }
     return(
         <React.Fragment>
-        <div>
-            <h1>This is empty game page!</h1>
+        <div className={sComp.wrapper}>
             <button onClick={onClickButton}>
-                Home
+                Add pokemon to deck!
             </button>
         </div>
         <Layout title="Pokemons" colorBg="SkyBlue">

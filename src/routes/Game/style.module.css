@@ -51,3 +51,7 @@ button:disabled:hover {
     border: 1px solid transparent;
     color: #fafafa;
 }
+
+.wrapper {
+    text-align: center;
+}
