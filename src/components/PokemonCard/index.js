@@ -3,9 +3,9 @@ import cn from 'classnames'
 import styleComponent from './style.module.css'
 import CardBack from './../../Assets/card-back-side.jpg'
 
-const PokemonCard = ({id, name, type, img, values, isActive = false, pickCard}) => {
+const PokemonCard = ({objectId, id, name, type, img, values, isActive = false, pickCard}) => {
     const handleCardClick =() =>{
-        pickCard && pickCard(id);
+        pickCard && pickCard(objectId);
     };
     return(
         <div className={styleComponent.root} onClick={handleCardClick}>

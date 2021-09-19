@@ -1,43 +1,52 @@
-import React, {useState} from 'react'
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react'
 import Layout from "../../components/Layout";
 import PokemonCard from "../../components/PokemonCard";
-
-import POKEMONS from '../../PokeDB.json';
+import sComp from "./style.module.css";
+import {GetAllPokemons,AddNewPokemon, UpdatePokemonById} from '../../Services/PokemonRepository';
 
 const GamePage = ({onPageChange}) =>{
-    const history = useHistory();
-    const [cards, setCards] = useState(POKEMONS.slice(0,5));
-    const onClickButton = () =>{
-        history.push('/home');
+    const updateCards = () => {
+        GetAllPokemons(setCards);
     }
-    const pickCard = (id) => {
+    useEffect(() =>{
+        updateCards();
+    }, []);
+    const [cards, setCards] = useState({});
+    const onClickButton = () =>{
+        const objArr = Object.entries(cards);
+        const randomPokemon = objArr[Math.floor(Math.random()*objArr.length)][1];
+        randomPokemon.isActive=false;
+        AddNewPokemon(randomPokemon);
+        updateCards();
+    }
+    const pickCard = (objectId) => {
         setCards( (prevState) => {
-            const newState = [...prevState];
-            const mutation = newState.find(x => x.id === id);
-            const elNum = newState.indexOf(mutation);
-            if (mutation.isActive === undefined)
-            {
-                const redacted = {...mutation, isActive : true};
-                newState[elNum]=redacted;
-            }
-            else
-                mutation.isActive = !mutation.isActive;
-            return newState;
-        })
+            return Object.entries(prevState).reduce((acc, item) => {
+                
+                if (item[0] === objectId) {
+                    const pokemon = {...item[1]};
+                    pokemon.isActive = !pokemon.isActive ;
+                    UpdatePokemonById(objectId, {...pokemon});
+                    acc[objectId] = pokemon;
+                }
+                else
+                    acc[item[0]]=item[1];
+                
+                return acc;
+            }, {});
+        });
     }
     return(
         <React.Fragment>
-        <div>
-            <h1>This is empty game page!</h1>
+        <div className={sComp.wrapper}>
             <button onClick={onClickButton}>
-                Home
+                Add pokemon to deck!
             </button>
         </div>
         <Layout title="Pokemons" colorBg="SkyBlue">
             <div className="flex">
             {
-                cards.map((item, index) => <PokemonCard key={index} 
+                Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
                     pickCard={pickCard} isActive={item.isActive}
                     />)

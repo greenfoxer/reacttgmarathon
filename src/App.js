@@ -12,11 +12,12 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 
-
 const App = () =>{
   const matchRoot = useRouteMatch('/');
   const matchHome = useRouteMatch('/home');
   const isMainPage = matchRoot.isExact || matchHome;
+
+  
   return(
     <Switch>
       <Route path="/404" component={NotFoundPage} />
