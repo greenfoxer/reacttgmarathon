@@ -2,13 +2,11 @@ import React, {useState, useEffect} from 'react'
 import Layout from "../../components/Layout";
 import PokemonCard from "../../components/PokemonCard";
 import sComp from "./style.module.css";
-import database from '../../Services/firebase';
+import {GetAllPokemons,AddNewPokemon, UpdatePokemonById} from '../../Services/PokemonRepository';
 
 const GamePage = ({onPageChange}) =>{
     const updateCards = () => {
-        database.ref('pokemons').once('value', (snapshot) =>{
-            setCards(snapshot.val());
-        });
+        GetAllPokemons(setCards);
     }
     useEffect(() =>{
         updateCards();
@@ -18,23 +16,22 @@ const GamePage = ({onPageChange}) =>{
         const objArr = Object.entries(cards);
         const randomPokemon = objArr[Math.floor(Math.random()*objArr.length)][1];
         randomPokemon.isActive=false;
-        const newKey = database.ref().child('pokemons').push().key;
-        database.ref('pokemons/' + newKey).set(randomPokemon);
+        AddNewPokemon(randomPokemon);
         updateCards();
     }
-    const pickCard = (id) => {
+    const pickCard = (objectId) => {
         setCards( (prevState) => {
             return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                if (pokemon.id === id) {
-                    pokemon.isActive = !pokemon.isActive ;
-                    database.ref('pokemons/'+ item[0]).set({
-                        ...pokemon
-                    });
-                };
                 
-                acc[item[0]] = pokemon;
-        
+                if (item[0] === objectId) {
+                    const pokemon = {...item[1]};
+                    pokemon.isActive = !pokemon.isActive ;
+                    UpdatePokemonById(objectId, {...pokemon});
+                    acc[objectId] = pokemon;
+                }
+                else
+                    acc[item[0]]=item[1];
+                
                 return acc;
             }, {});
         });
@@ -49,7 +46,7 @@ const GamePage = ({onPageChange}) =>{
         <Layout title="Pokemons" colorBg="SkyBlue">
             <div className="flex">
             {
-                Object.entries(cards).map(([key,item]) => <PokemonCard key={key} 
+                Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
                     pickCard={pickCard} isActive={item.isActive}
                     />)
