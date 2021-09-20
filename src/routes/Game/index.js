@@ -1,23 +1,28 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Layout from "../../components/Layout";
 import PokemonCard from "../../components/PokemonCard";
 import sComp from "./style.module.css";
-import {GetAllPokemons,AddNewPokemon, UpdatePokemonById} from '../../Services/PokemonRepository';
+import { FireBaseContext } from '../../contexts/FirebaseContext';
 
 const GamePage = ({onPageChange}) =>{
-    const updateCards = () => {
-        GetAllPokemons(setCards);
-    }
-    useEffect(() =>{
-        updateCards();
-    }, []);
+    const pokemonContext = useContext(FireBaseContext);
     const [cards, setCards] = useState({});
+
+    /* const updateCards = async () => {
+        await pokemonContext.GetAllPokemons(setCards);
+        //await pokemonContext.GetPokemonSocket((pokemons) => setCards(pokemons));
+    } */
+
+    useEffect(() =>{ console.log('useEffect Start'); 
+        //updateCards();
+        pokemonContext.GetPokemonSocket(setCards); 
+    }, []);
+
     const onClickButton = () =>{
         const objArr = Object.entries(cards);
         const randomPokemon = objArr[Math.floor(Math.random()*objArr.length)][1];
         randomPokemon.isActive=false;
-        AddNewPokemon(randomPokemon);
-        updateCards();
+        pokemonContext.AddNewPokemon(randomPokemon);
     }
     const pickCard = (objectId) => {
         setCards( (prevState) => {
@@ -26,7 +31,7 @@ const GamePage = ({onPageChange}) =>{
                 if (item[0] === objectId) {
                     const pokemon = {...item[1]};
                     pokemon.isActive = !pokemon.isActive ;
-                    UpdatePokemonById(objectId, {...pokemon});
+                    pokemonContext.UpdatePokemonById(objectId, {...pokemon});
                     acc[objectId] = pokemon;
                 }
                 else

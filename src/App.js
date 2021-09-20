@@ -19,25 +19,25 @@ const App = () =>{
 
   
   return(
-    <Switch>
-      <Route path="/404" component={NotFoundPage} />
-      <Route>
-        <React.Fragment>
-          <MenuHeader bgActive={!isMainPage} />
-          <div className={cn(sComp.wrap, {[sComp.isHomePage] : isMainPage})}>
-            <Switch>
-              <Route path="/" exact component={HomePage} />
-              <Route path="/home" component={HomePage}  />
-              <Route path="/game" component={GamePage} />
-              <Route path="/about" component={AboutPage} />
-              <Route path="/contacts" component={ContactsPage} />
-              <Route render={ () => ( <Redirect to='/404'/>)} />
-            </Switch>
-          </div>
-          <Footer/>
-        </React.Fragment>
-      </Route>
-    </Switch>
+      <Switch>
+        <Route path="/404" component={NotFoundPage} />
+        <Route>
+          <React.Fragment>
+            <MenuHeader bgActive={!isMainPage} />
+            <div className={cn(sComp.wrap, {[sComp.isHomePage] : isMainPage})}>
+              <Switch>
+                <Route path="/" exact component={HomePage} />
+                <Route path="/home" component={HomePage}  />
+                <Route path="/game" component={GamePage} />
+                <Route path="/about" component={AboutPage} />
+                <Route path="/contacts" component={ContactsPage} />
+                <Route render={ () => ( <Redirect to='/404'/>)} />
+              </Switch>
+            </div>
+            <Footer/>
+          </React.Fragment>
+        </Route>
+      </Switch>
   );
 }
 

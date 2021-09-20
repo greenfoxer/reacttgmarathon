@@ -13,23 +13,34 @@ const firebaseConfig = {
   
   firebase.initializeApp(firebaseConfig);
 
-  export const GetAllPokemons = (callBack) =>{
-    return database.ref('pokemons').once('value', (snapshot) =>{
-      callBack && callBack(snapshot.val());
-    });
+  class Firebase{
+
+    constructor() {
+      this.fire = firebase;
+      this.database = this.fire.database();
+    }
+
+    GetPokemonSocket = (callBack) => {
+      this.database.ref('pokemons').on('value', snapshot => {
+        callBack && callBack(snapshot.val());
+      });
+    }
+
+    GetAllPokemons = async (callBack) =>{
+      return await this.database.ref('pokemons').once('value').then( snapshot => {
+        callBack && callBack(snapshot.val());
+      });
+    }
+
+    UpdatePokemonById = (id, update ) =>
+    {
+      this.database.ref('pokemons/'+ id).set(update);
+    }
+
+    AddNewPokemon = (pokemon, callback) => {
+      const newKey = this.database.ref().child('pokemons').push().key;
+      this.database.ref('pokemons/' + newKey).set(pokemon).then( () => { callback && callback() });
+    }
   }
 
-  export const UpdatePokemonById = (id, update ) =>
-  {
-    database.ref('pokemons/'+ id).set(update);
-  }
-
-  export const AddNewPokemon = (pokemon) => {
-    const newKey = database.ref().child('pokemons').push().key;
-    database.ref('pokemons/' + newKey).set(pokemon);
-  }
-
-  export const fire = firebase;
-  export const database = fire.database();
-
-  export default database;
+  export default Firebase;
