@@ -55,3 +55,9 @@ button:disabled:hover {
 .wrapper {
     text-align: center;
 }
+
+.pokemonCard.origin {
+    width: 268px;
+    height: 388px;
+    margin: 10;
+}

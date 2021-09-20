@@ -1,17 +1,14 @@
 import cn from 'classnames'
-
 import s from './style.module.css'
-import CardBack from './../../Assets/card-back-side.jpg'
 
-const PokemonCard = ({objectId, className, minimize, id, name, type, img, values, isActive = false, pickCard}) => {
+const PokemonCard = ({objectId, className, isSelected=false, minimize = false, id, name, type, img, values, isActive = false, pickCard}) => {
     const handleCardClick =() =>{
         pickCard && pickCard(objectId);
     };
-    console.log(className, name);
-    const names = cn(s[className], s.pokemonCard, {[s.active]: isActive});
-    console.log(names);
+    console.log(className);
+    className={width:'268px', height:'388px'};
     return(
-        <div className={cn(className, s.pokemonCard, {[s.active]: isActive})}>
+        <div className={cn(s.origin, s.pokemonCard, {[s.active]: isActive},{[s.selected]: isSelected})} onClick={handleCardClick}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>

@@ -229,3 +229,9 @@
     transform: translate(-50%, 0);
     bottom: 0;
 }
+
+.origin{
+    width: 268px;
+    height: 388px;
+    margin: 10;
+}
