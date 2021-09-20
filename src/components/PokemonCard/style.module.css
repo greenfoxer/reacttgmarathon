@@ -36,7 +36,8 @@
 }
 
 .pokemonCard.selected {
-    margin-top: -40px;
+    margin-top: -20px;
+    margin-bottom: 20px;
 }
 
 .cardFront,
@@ -228,10 +229,4 @@
     left: 50%;
     transform: translate(-50%, 0);
     bottom: 0;
-}
-
-.origin{
-    width: 268px;
-    height: 388px;
-    margin: 10;
 }

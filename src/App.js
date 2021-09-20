@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useLocation, Redirect } from "react-router-dom";
 
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
@@ -13,10 +13,8 @@ import Footer from "./components/Footer";
 import cn from 'classnames'
 
 const App = () =>{
-  const matchRoot = useRouteMatch('/');
-  const matchHome = useRouteMatch('/home');
-  const isMainPage = matchRoot.isExact || matchHome;
-
+  const location = useLocation();
+  const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
   
   return(
       <Switch>

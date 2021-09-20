@@ -6,9 +6,8 @@ const PokemonCard = ({objectId, className, isSelected=false, minimize = false, i
         pickCard && pickCard(objectId);
     };
     console.log(className);
-    className={width:'268px', height:'388px'};
     return(
-        <div className={cn(s.origin, s.pokemonCard, {[s.active]: isActive},{[s.selected]: isSelected})} onClick={handleCardClick}>
+        <div className={cn(className, s.pokemonCard, {[s.active]: isActive},{[s.selected]: isSelected})} onClick={handleCardClick}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>

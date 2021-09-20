@@ -56,8 +56,15 @@ button:disabled:hover {
     text-align: center;
 }
 
-.pokemonCard.origin {
-    width: 268px;
+.flex {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 40px;
+}
+
+.origin {
+    width: 100%;
     height: 388px;
     margin: 10;
+    cursor: pointer;
 }

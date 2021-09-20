@@ -3,19 +3,32 @@ import StartPage from './routes/Start';
 import BoardPage from './routes/Board';
 import FinishPage from './routes/Finish';
 import { PokemonContext } from '../../contexts/PokemonContext';
+import {useState} from 'react';
 
 const GamePage = () => {
     const match = useRouteMatch();
-    const choosenPokemons = [];
-    const pushPokemonToGame = (item) => {
+    const [choosenPokemons, setChosenPokemons] = useState({});
+    const pushPokemonToGame = (key, item) => {
         console.log('add pokemon to game', item );
-        choosenPokemons.push(item);
+        setChosenPokemons( prevState =>{
+            if (prevState[key])
+            {
+                const copyState = {...prevState};
+                delete copyState[key];
+                return copyState;
+            }
+            return { ...prevState, [key] : item}
+        });
         console.log(choosenPokemons);
     }
+    const cleanPokemons = () => {
+        setChosenPokemons(prevstate => {})
+    };
     return (
         <PokemonContext.Provider value={{
             pokemons : choosenPokemons,
-            onPokemonAdd : pushPokemonToGame
+            onPokemonAdd : pushPokemonToGame,
+            clean : cleanPokemons
         }
         }>
             <Switch>

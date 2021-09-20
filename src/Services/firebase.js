@@ -26,6 +26,10 @@ const firebaseConfig = {
       });
     }
 
+    OffPokemonSocket = () => {
+      this.database.ref('pokemons').off();
+    }
+
     GetAllPokemons = async (callBack) =>{
       return await this.database.ref('pokemons').once('value').then( snapshot => {
         callBack && callBack(snapshot.val());

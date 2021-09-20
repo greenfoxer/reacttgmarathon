@@ -1,10 +1,17 @@
 import s from './style.module.css';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 
 const BoardPage = () => {
+    
     const gameContext = useContext(PokemonContext);
+    useEffect(() => {
+        
+        return () => {
+            gameContext.clean();
+        }
+    }, [])
     const cards = gameContext.pokemons;
     console.log('cards', cards);
     return (
@@ -13,7 +20,7 @@ const BoardPage = () => {
                             {
                         Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
                             id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
-                            isActive={true} isSelected={item.isSelected}
+                            isActive={true} minimize={true} className={s.card}
   
                             />)
 }

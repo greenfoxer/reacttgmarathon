@@ -19,7 +19,7 @@ const Menu = ({onMenuStateChange,isMenuShowed}) => {
             <div className={sComp.overlay} />
             <div className={sComp.menuItems}>
                 <ul>
-                    { MENUITEMS.map( (s, index) => (<li key={index}><Link onClick={onClickMenuItem} to={s}>{s.toUpperCase()} </Link></li>)) }
+                    { MENUITEMS.map( (s, index) => (<li key={index}><Link onClick={onClickMenuItem} to={'/'+s}>{s.toUpperCase()} </Link></li>)) }
                 </ul>
             </div>
         </div>

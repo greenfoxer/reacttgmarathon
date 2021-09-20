@@ -23,6 +23,8 @@ const StartPage = ({onPageChange}) =>{
         //updateCards();
         pokemonContext.GetPokemonSocket(setCards); 
         console.log(cards);
+
+        return () => { console.log('unsubscribe');pokemonContext.OffPokemonSocket();}
     }, []);
 
     const onClickButton = () =>{
@@ -34,36 +36,48 @@ const StartPage = ({onPageChange}) =>{
         pokemonContext.AddNewPokemon(randomPokemon); */
     }
     const pickCard = (objectId) => {
-        setCards( (prevState) => {
-            return Object.entries(prevState).reduce((acc, item) => {
+        const objTosend = cards[objectId];
+        console.log(objTosend);
+        gameContext.onPokemonAdd(objectId,objTosend);
+        setCards( (prevState) => ({
+            ...prevState,
+            [objectId] : {
+                ...prevState[objectId],
+                isSelected : !prevState[objectId].isSelected
+            }
+           /*  return Object.entries(prevState).reduce((acc, item) => {
                 
                 if (item[0] === objectId) {
                     const pokemon = {...item[1]};
                     pokemon.isSelected = !pokemon.isSelected ;
                     acc[objectId] = pokemon;
-                    gameContext.onPokemonAdd(pokemon);
+                    gameContext.onPokemonAdd(objectId,pokemon);
                 }
                 else
                     acc[item[0]]=item[1];
                 
                 return acc;
-            }, {});
-        });
+            }, {}); */
+        }));
     }
     return(
         <React.Fragment>
         <div className={sComp.wrapper}>
-            <button onClick={onClickButton}>
+            <button onClick={onClickButton}
+                disabled={Object.keys(gameContext.pokemons).length < 5 }
+            >
                 Add pokemon to deck!
             </button>
         </div>
         <Layout title="Pokemons" colorBg="SkyBlue">
-            <div className="flex">
+            <div className={sComp.flex}>
             {
                 Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
-                    pickCard={pickCard} isActive={true} isSelected={item.isSelected}
-                    className={cn(sComp.origin)}
+                    pickCard={ () =>{
+                        if(Object.keys(gameContext.pokemons).length < 5 || item.isSelected)
+                        pickCard(key);}} isActive={true} isSelected={item.isSelected}
+                    className={sComp.origin}
                     />)
             }
             </div>
