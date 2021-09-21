@@ -13,7 +13,6 @@ const BoardPage = () => {
         }
     }, [])
     const cards = gameContext.pokemons;
-    console.log('cards', cards);
     return (
         <div className={s.root}>
 						<div className={s.playerOne}>

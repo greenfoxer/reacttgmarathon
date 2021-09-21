@@ -5,7 +5,6 @@ const PokemonCard = ({objectId, className, isSelected=false, minimize = false, i
     const handleCardClick =() =>{
         pickCard && pickCard(objectId);
     };
-    console.log(className);
     return(
         <div className={cn(className, s.pokemonCard, {[s.active]: isActive},{[s.selected]: isSelected})} onClick={handleCardClick}>
             <div className={s.cardFront}>

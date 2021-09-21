@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useRouteMatch, useLocation, Redirect } from "react-router-dom";
+import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";

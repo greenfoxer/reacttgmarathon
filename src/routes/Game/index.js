@@ -9,7 +9,6 @@ const GamePage = () => {
     const match = useRouteMatch();
     const [choosenPokemons, setChosenPokemons] = useState({});
     const pushPokemonToGame = (key, item) => {
-        console.log('add pokemon to game', item );
         setChosenPokemons( prevState =>{
             if (prevState[key])
             {
@@ -19,10 +18,9 @@ const GamePage = () => {
             }
             return { ...prevState, [key] : item}
         });
-        console.log(choosenPokemons);
     }
     const cleanPokemons = () => {
-        setChosenPokemons(prevstate => {})
+        setChosenPokemons(prevstate => { return Object(); })
     };
     return (
         <PokemonContext.Provider value={{
