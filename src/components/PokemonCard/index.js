@@ -1,43 +1,41 @@
 import cn from 'classnames'
+import s from './style.module.css'
 
-import styleComponent from './style.module.css'
-import CardBack from './../../Assets/card-back-side.jpg'
-
-const PokemonCard = ({objectId, id, name, type, img, values, isActive = false, pickCard}) => {
+const PokemonCard = ({objectId, className, isSelected=false, minimize = false, id, name, type, img, values, isActive = false, pickCard}) => {
     const handleCardClick =() =>{
         pickCard && pickCard(objectId);
     };
     return(
-        <div className={styleComponent.root} onClick={handleCardClick}>
-            <div className={cn(styleComponent.pokemonCard, { [styleComponent.active] : isActive})}>
-                <div className={styleComponent.cardFront}>
-                    <div className={cn(styleComponent.wrap, styleComponent.front)}>
-                        <div className={cn(styleComponent.pokemon, styleComponent[type])}> 
-                            <div className={styleComponent.values}>
-                                <div className={cn(styleComponent.count, styleComponent.top)}>{values.top}</div>
-                                <div className={cn(styleComponent.count, styleComponent.right)}>{values.right}</div>
-                                <div className={cn(styleComponent.count, styleComponent.bottom)}>{values.bottom}</div>
-                                <div className={cn(styleComponent.count, styleComponent.left)}>{values.left}</div>
-                            </div>
-                            <div className={styleComponent.imgContainer}>
-                                <img src={img} alt={name} />
-                            </div>
-                            <div className={styleComponent.info}>
-                                <span className={styleComponent.number}>#{id}</span>
-                                <h3 className={styleComponent.name}>{name.toUpperCase()}</h3>
-                                <small className={styleComponent.type}>Type: <span>{type.toUpperCase()}</span></small>
-                            </div>
+        <div className={cn(className, s.pokemonCard, {[s.active]: isActive},{[s.selected]: isSelected})} onClick={handleCardClick}>
+            <div className={s.cardFront}>
+                <div className={cn(s.wrap, s.front)}>
+                    <div className={cn(s.pokemon, s[type])}>
+                        <div className={s.values}>
+                            <div className={cn(s.count, s.top)}>{values.top}</div>
+                            <div className={cn(s.count, s.right)}>{values.right}</div>
+                            <div className={cn(s.count, s.bottom)}>{values.bottom}</div>
+                            <div className={cn(s.count, s.left)}>{values.left}</div>
                         </div>
+                        <div className={s.imgContainer}>
+                            <img src={img} alt={name} />
+                        </div>
+                        { !minimize && (<div className={s.info}>
+                            <span className={s.number}>#{id}</span>
+                            <h3 className={s.name}>
+                                {name}
+                            </h3>
+                            <small className={s.type}>
+                                Type: <span>{type}</span>
+                            </small>
+                        </div>) }
                     </div>
                 </div>
-
-                <div className={styleComponent.cardBack}>
-                    <div className={cn(styleComponent.wrap, styleComponent.back)}>
-                        <img src={CardBack} alt="Сard Backed" />
-                    </div>
-                </div>
-
             </div>
+
+            <div className={s.cardBack}>
+                <div className={cn(s.wrap, s.back)} />
+            </div>
+
         </div>);
 }
 

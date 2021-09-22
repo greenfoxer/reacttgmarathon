@@ -1,60 +1,41 @@
-import React, {useState, useEffect} from 'react'
-import Layout from "../../components/Layout";
-import PokemonCard from "../../components/PokemonCard";
-import sComp from "./style.module.css";
-import {GetAllPokemons,AddNewPokemon, UpdatePokemonById} from '../../Services/PokemonRepository';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import StartPage from './routes/Start';
+import BoardPage from './routes/Board';
+import FinishPage from './routes/Finish';
+import { PokemonContext } from '../../contexts/PokemonContext';
+import {useState} from 'react';
 
-const GamePage = ({onPageChange}) =>{
-    const updateCards = () => {
-        GetAllPokemons(setCards);
-    }
-    useEffect(() =>{
-        updateCards();
-    }, []);
-    const [cards, setCards] = useState({});
-    const onClickButton = () =>{
-        const objArr = Object.entries(cards);
-        const randomPokemon = objArr[Math.floor(Math.random()*objArr.length)][1];
-        randomPokemon.isActive=false;
-        AddNewPokemon(randomPokemon);
-        updateCards();
-    }
-    const pickCard = (objectId) => {
-        setCards( (prevState) => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                
-                if (item[0] === objectId) {
-                    const pokemon = {...item[1]};
-                    pokemon.isActive = !pokemon.isActive ;
-                    UpdatePokemonById(objectId, {...pokemon});
-                    acc[objectId] = pokemon;
-                }
-                else
-                    acc[item[0]]=item[1];
-                
-                return acc;
-            }, {});
+const GamePage = () => {
+    const match = useRouteMatch();
+    const [choosenPokemons, setChosenPokemons] = useState({});
+    const pushPokemonToGame = (key, item) => {
+        setChosenPokemons( prevState =>{
+            if (prevState[key])
+            {
+                const copyState = {...prevState};
+                delete copyState[key];
+                return copyState;
+            }
+            return { ...prevState, [key] : item}
         });
     }
-    return(
-        <React.Fragment>
-        <div className={sComp.wrapper}>
-            <button onClick={onClickButton}>
-                Add pokemon to deck!
-            </button>
-        </div>
-        <Layout title="Pokemons" colorBg="SkyBlue">
-            <div className="flex">
-            {
-                Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
-                    id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
-                    pickCard={pickCard} isActive={item.isActive}
-                    />)
-            }
-            </div>
-        </Layout>
-      </React.Fragment>
-    )
-}
+    const cleanPokemons = () => {
+        setChosenPokemons(prevstate => { return Object(); })
+    };
+    return (
+        <PokemonContext.Provider value={{
+            pokemons : choosenPokemons,
+            onPokemonAdd : pushPokemonToGame,
+            clean : cleanPokemons
+        }
+        }>
+            <Switch>
+                <Route path={`${match.path}/`} exact component={StartPage} />
+                <Route path={`${match.path}/board`} component={BoardPage} />
+                <Route path={`${match.path}/finish`} component={FinishPage} />
+            </Switch>
+        </PokemonContext.Provider>
+    );
+};
 
 export default GamePage;
