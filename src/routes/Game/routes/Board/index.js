@@ -10,7 +10,10 @@ const BoardPage = () => {
     const gameContext = useContext(PokemonContext);
     const history = useHistory();
     const [board,setBoard] = useState([]);
+    const [player1, setPlayer1] = useState(() =>
+    Object.values(gameContext.pokemons).map(item=>({...item, possession:'blue'})));
     const [player2,setPlayer2] = useState([]);
+    const [chosenCard, setChosenCard] = useState(null);
     const cards = gameContext.pokemons;
 
     /* if(Object.keys(cards).length === 0)
@@ -23,25 +26,40 @@ const BoardPage = () => {
 
         const palyer2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
         const palyer2Request = await palyer2Response.json();
-        setPlayer2(palyer2Request.data);
+        setPlayer2(palyer2Request.data.map(item=>({...item, possession:'red'})));
 
 
         return () => {
             gameContext.clean();
         }
     }, []);
-    const handleClickBoardPlate = (pos) =>{
-        console.log(pos);
+    const handleClickBoardPlate = async (position) =>{
+        console.log(position);
+        console.log(chosenCard);
+        if(chosenCard)
+        {
+            const params = { position, card:chosenCard, board };
+            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(params),
+            });
+
+            const request = await res.json();
+
+            setBoard(request.data);
+        }
     }
     return (
         <div className={s.root}>
             <div className={s.playerOne}>
                 {
-                Object.values(cards).map( (item) => <PokemonCard key={item.id}
-                    id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
-                    isActive minimize={true} className={s.card}
-
-                />)}
+                    <PlayerBoard player={1} cards={player1}
+                        onCardChosen={ (card) => setChosenCard(card)}
+                    />
+                }
             </div>
             <div className={s.board}>
                 {
@@ -51,14 +69,14 @@ const BoardPage = () => {
                         onClick={ () => { !item.card && handleClickBoardPlate(item.position);}}
                         >
                             {
-                                item.card && <PokemonCard {...item} minimize />
+                                item.card && <PokemonCard {...item.card} isActive minimize />
                             }
                         </div>
                     ))
                 }
             </div>
             <div className={s.playerTwo}>
-                <PlayerBoard cards={player2}/>
+                <PlayerBoard player={2} cards={player2} onCardChosen={ (card) => setChosenCard(card)} />
             </div>
         </div>
     );

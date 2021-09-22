@@ -1,14 +1,13 @@
 .cardBoard {
-    width: 100%;
-    max-height: 14.8vw;
+    max-width: 18vw;
+    height: 14.8vw;
     margin-top: -6vw;
 }
 
-.card {
-    max-height: 14.8vw;
-    margin-top: -6vw;
-}
-
-.card:first-child {
+.cardBoard:first-child {
     margin-top: 0;
+}
+
+.cardBoard.selected{
+    margin-left: -20px;
 }
