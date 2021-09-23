@@ -24,28 +24,33 @@ const BoardPage = () => {
     const gameContext = useContext(PokemonContext);
     const history = useHistory();
     const [board,setBoard] = useState([]);
-    const [player1, setPlayer1] = useState(() => Object.values(gameContext.pokemons).map(item=>({...item, possession:'blue'})));
+    const [player1, setPlayer1] = useState(() => Object.values(gameContext.player1).map(item=>({...item, possession:'blue'})));
     const [player2,setPlayer2] = useState([]);
     const [step,setStep] = useState(0);
     const [chosenCard, setChosenCard] = useState(null);
-    const cards = gameContext.pokemons;
+    const cards = gameContext.player1;
 
     if(Object.keys(cards).length === 0)
         history.replace('/game');
 
-    useEffect( async () => {
-        const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
-        const boardRequest = await boardResponse.json();
-        setBoard(boardRequest.data);
+    useEffect( () => {   
+        async function getResponse () {
+            const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
+            const boardRequest = await boardResponse.json();
+            setBoard(boardRequest.data);
 
-        const palyer2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
-        const palyer2Request = await palyer2Response.json();
-        setPlayer2(palyer2Request.data.map(item=>({...item, possession:'red'})));
+            const palyer2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
+            const palyer2Request = await palyer2Response.json();
+            setPlayer2(palyer2Request.data.map(item=>({...item, possession:'red'})));
+
+            gameContext.player2Set(palyer2Request.data.map(item=>({...item})));
+        };
+        getResponse();
 
 
-        return () => {
-            gameContext.clean();
-        }
+        /* return () => {
+            gameContext.clean(); 
+        }*/
     }, []);
     const handleClickBoardPlate = async (position) =>{
         if(chosenCard)
@@ -76,19 +81,22 @@ const BoardPage = () => {
         if (step === 9)
         {
             const [count1, count2] = counterWin(board,player1,player2);
-            console.log(count1, count2);
             if(count1>count2)
             {
+                gameContext.setWinner(1);
                 alert('WIN');
             }
             else if (count2 > count1)
             {
+                gameContext.setWinner(2);
                 alert('LOSE');
             }
             else
             {
+                gameContext.setWinner(0);
                 alert('DRAW');
             }
+            history.push('/game/finish');
         }
     },[step]);
     return (
