@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './components/PlayerBoard';
+import ArrowChoice from './components/ArrowChoice';
 
 const counterWin = (board, player1, player2 ) => {
     let player1Count = player1.length;
@@ -28,7 +29,24 @@ const BoardPage = () => {
     const [player2,setPlayer2] = useState([]);
     const [step,setStep] = useState(0);
     const [chosenCard, setChosenCard] = useState(null);
+
+    const getTurn = (currentTurn) => {
+        console.log('currentTurn',currentTurn);
+        if(currentTurn !== undefined){
+            console.log('(currentTurn%2)',(currentTurn%2));
+            console.log('(currentTurn%2) + 1',(currentTurn%2) + 1); 
+            return ((currentTurn%2) + 1);
+        }
+        if(Math.random() > 0.5)
+            return 1;
+        else
+            return 2;
+    }
+    
+    const [turn, setTurn] = useState(getTurn(undefined));
     const cards = gameContext.player1;
+
+    console.log('init turn', turn);
 
     if(Object.keys(cards).length === 0)
         history.replace('/game');
@@ -75,6 +93,8 @@ const BoardPage = () => {
                 setPlayer2(prevState => prevState.filter(t=>t.id !== chosenCard.id));
 
             setStep(prevState => { const count =prevState +1 ; return count;})
+            setTurn(prevState => { const newTurn = getTurn(prevState); return newTurn;});
+
         }
     }
     useEffect(() =>{
@@ -98,15 +118,13 @@ const BoardPage = () => {
             }
             history.push('/game/finish');
         }
+
     },[step]);
     return (
         <div className={s.root}>
+            <ArrowChoice side={turn} />
             <div className={s.playerOne}>
-                {
-                    <PlayerBoard player={1} cards={player1}
-                        onCardChosen={ (card) => setChosenCard(card)}
-                    />
-                }
+                    <PlayerBoard player={1} cards={player1} onCardChosen={ (card) => setChosenCard(card)}  />
             </div>
             <div className={s.board}>
                 {
