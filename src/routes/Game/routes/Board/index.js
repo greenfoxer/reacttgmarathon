@@ -11,9 +11,9 @@ const counterWin = (board, player1, player2 ) => {
     let player2Count = player2.length;
 
     board.forEach(element => {
-        if(element.card.possession === 'red')
+        if(element.card?.possession === 'red')
             player2Count++;
-        if(element.card.possession === 'blue')
+        if(element.card?.possession === 'blue')
             player1Count++;
     });
 
@@ -71,7 +71,8 @@ const BoardPage = () => {
         }*/
     }, []);
     const handleClickBoardPlate = async (position) =>{
-        if(chosenCard)
+        console.log(chosenCard.player);
+        if(chosenCard && chosenCard.player === turn)
         {
             const params = { position, card:chosenCard, board };
             const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
@@ -120,11 +121,19 @@ const BoardPage = () => {
         }
 
     },[step]);
+    const chooseCard = (card) => {
+        if( card.player === turn)
+        {
+            setChosenCard(card)
+            return true;
+        }
+        return false;
+    }
     return (
         <div className={s.root}>
             <ArrowChoice side={turn} />
             <div className={s.playerOne}>
-                    <PlayerBoard player={1} cards={player1} onCardChosen={ (card) => setChosenCard(card)}  />
+                    <PlayerBoard player={1} cards={player1} onCardChosen={ chooseCard}  />
             </div>
             <div className={s.board}>
                 {
@@ -141,7 +150,7 @@ const BoardPage = () => {
                 }
             </div>
             <div className={s.playerTwo}>
-                <PlayerBoard player={2} cards={player2} onCardChosen={ (card) => setChosenCard(card)} />
+                <PlayerBoard player={2} cards={player2} onCardChosen={ chooseCard} />
             </div>
         </div>
     );

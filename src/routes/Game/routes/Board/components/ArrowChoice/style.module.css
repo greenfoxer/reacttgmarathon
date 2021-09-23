@@ -1,28 +1,29 @@
 .arrow {
     position: absolute;
     top: 50%;
-    left: 50%;
     translate: -50%;
     margin: -60px 0 0 -60px;
     width: 0;
     height: 0;
+    z-index: 99999;
 
     /* Triangle Borders */
-    border-top: 60px solid transparent;
-    border-bottom: 60px solid transparent;
-    border-left: 100px solid yellow;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    border-left: 50px solid yellow;
     animation: spin 1s linear infinite;
 }
 
 .rightSide {
     animation: none;
-
-    transform: rotateY(0deg);
+    right: -2vw;
+    transform: rotateY(-180deg);
 }
 
 .leftSide {
     animation: none;
-    transform: rotateY(-180deg);
+    left: 6vw;
+    transform: rotateY(0deg);
 }
 
 @keyframes spin {
