@@ -5,6 +5,7 @@ import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './components/PlayerBoard';
 import ArrowChoice from './components/ArrowChoice';
+import Result from './components/Result';
 
 const counterWin = (board, player1, player2 ) => {
     let player1Count = player1.length;
@@ -29,12 +30,10 @@ const BoardPage = () => {
     const [player2,setPlayer2] = useState([]);
     const [step,setStep] = useState(0);
     const [chosenCard, setChosenCard] = useState(null);
+    const [result, setResult] = useState(null);
 
     const getTurn = (currentTurn) => {
-        console.log('currentTurn',currentTurn);
         if(currentTurn !== undefined){
-            console.log('(currentTurn%2)',(currentTurn%2));
-            console.log('(currentTurn%2) + 1',(currentTurn%2) + 1); 
             return ((currentTurn%2) + 1);
         }
         if(Math.random() > 0.5)
@@ -45,8 +44,6 @@ const BoardPage = () => {
     
     const [turn, setTurn] = useState(getTurn(undefined));
     const cards = gameContext.player1;
-
-    console.log('init turn', turn);
 
     if(Object.keys(cards).length === 0)
         history.replace('/game');
@@ -71,7 +68,6 @@ const BoardPage = () => {
         }*/
     }, []);
     const handleClickBoardPlate = async (position) =>{
-        console.log(chosenCard.player);
         if(chosenCard && chosenCard.player === turn)
         {
             const params = { position, card:chosenCard, board };
@@ -98,28 +94,36 @@ const BoardPage = () => {
 
         }
     }
-    useEffect(() =>{
-        if (step === 9)
-        {
-            const [count1, count2] = counterWin(board,player1,player2);
-            if(count1>count2)
+    useEffect( () => {
+        async function getResult(){
+            if (step === 9)
             {
-                gameContext.setWinner(1);
-                alert('WIN');
-            }
-            else if (count2 > count1)
-            {
-                gameContext.setWinner(2);
-                alert('LOSE');
-            }
-            else
-            {
-                gameContext.setWinner(0);
-                alert('DRAW');
-            }
-            history.push('/game/finish');
+                const [count1, count2] = counterWin(board,player1,player2);
+                let caption = '';
+                if(count1>count2)
+                {
+                    gameContext.setWinner(1);
+                    caption ='win';
+                }
+                else if (count2 > count1)
+                {
+                    gameContext.setWinner(2);
+                    caption='lose';
+                }
+                else
+                {
+                    gameContext.setWinner(0);
+                    caption = 'draw';
+                }
+                setResult(caption);
+                function sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+                await sleep(4000);
+                history.push('/game/finish');
+            };
         }
-
+        getResult();
     },[step]);
     const chooseCard = (card) => {
         if( card.player === turn)
@@ -131,6 +135,7 @@ const BoardPage = () => {
     }
     return (
         <div className={s.root}>
+            <Result type={result} />
             <ArrowChoice side={turn} />
             <div className={s.playerOne}>
                     <PlayerBoard player={1} cards={player1} onCardChosen={ chooseCard}  />
