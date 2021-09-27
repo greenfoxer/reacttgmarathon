@@ -230,3 +230,9 @@
     transform: translate(-50%, 0);
     bottom: 0;
 }
+.blue {
+    background-color: #a8caea;
+}
+.red {
+    background-color: #d998b2;
+}

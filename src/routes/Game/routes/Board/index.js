@@ -1,39 +1,161 @@
 import s from './style.module.css';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
+import PlayerBoard from './components/PlayerBoard';
+import ArrowChoice from './components/ArrowChoice';
+import Result from './components/Result';
+
+const counterWin = (board, player1, player2 ) => {
+    let player1Count = player1.length;
+    let player2Count = player2.length;
+
+    board.forEach(element => {
+        if(element.card?.possession === 'red')
+            player2Count++;
+        if(element.card?.possession === 'blue')
+            player1Count++;
+    });
+
+    return [player1Count, player2Count];
+}
 
 const BoardPage = () => {
     
     const gameContext = useContext(PokemonContext);
-    useEffect(() => {
-        
-        return () => {
-            gameContext.clean();
+    const history = useHistory();
+    const [board,setBoard] = useState([]);
+    const [player1, setPlayer1] = useState(() => Object.values(gameContext.player1).map(item=>({...item, possession:'blue'})));
+    const [player2,setPlayer2] = useState([]);
+    const [step,setStep] = useState(0);
+    const [chosenCard, setChosenCard] = useState(null);
+    const [result, setResult] = useState(null);
+
+    const getTurn = (currentTurn) => {
+        if(currentTurn !== undefined){
+            return ((currentTurn%2) + 1);
         }
-    }, [])
-    const cards = gameContext.pokemons;
+        if(Math.random() > 0.5)
+            return 1;
+        else
+            return 2;
+    }
+    
+    const [turn, setTurn] = useState(getTurn(undefined));
+    const cards = gameContext.player1;
+
+    if(Object.keys(cards).length === 0)
+        history.replace('/game');
+
+    useEffect( () => {   
+        async function getResponse () {
+            const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
+            const boardRequest = await boardResponse.json();
+            setBoard(boardRequest.data);
+
+            const palyer2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
+            const palyer2Request = await palyer2Response.json();
+            setPlayer2(palyer2Request.data.map(item=>({...item, possession:'red'})));
+
+            gameContext.player2Set(palyer2Request.data.map(item=>({...item})));
+        };
+        getResponse();
+
+
+        /* return () => {
+            gameContext.clean(); 
+        }*/
+    }, []);
+    const handleClickBoardPlate = async (position) =>{
+        if(chosenCard && chosenCard.player === turn)
+        {
+            const params = { position, card:chosenCard, board };
+            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(params),
+            });
+
+            const request = await res.json();
+
+            setBoard(request.data);
+
+            if(chosenCard.player === 1)
+                setPlayer1(prevState => prevState.filter(t=>t.id !== chosenCard.id));
+
+            if(chosenCard.player === 2)
+                setPlayer2(prevState => prevState.filter(t=>t.id !== chosenCard.id));
+
+            setStep(prevState => { const count =prevState +1 ; return count;})
+            setTurn(prevState => { const newTurn = getTurn(prevState); return newTurn;});
+
+        }
+    }
+    useEffect( () => {
+        async function getResult(){
+            if (step === 9)
+            {
+                const [count1, count2] = counterWin(board,player1,player2);
+                let caption = '';
+                if(count1>count2)
+                {
+                    gameContext.setWinner(1);
+                    caption ='win';
+                }
+                else if (count2 > count1)
+                {
+                    gameContext.setWinner(2);
+                    caption='lose';
+                }
+                else
+                {
+                    gameContext.setWinner(0);
+                    caption = 'draw';
+                }
+                setResult(caption);
+                function sleep(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+                await sleep(4000);
+                history.push('/game/finish');
+            };
+        }
+        getResult();
+    },[step]);
+    const chooseCard = (card) => {
+        if( card.player === turn)
+        {
+            setChosenCard(card)
+            return true;
+        }
+        return false;
+    }
     return (
         <div className={s.root}>
-						<div className={s.playerOne}>
-                            {
-                        Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
-                            id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
-                            isActive={true} minimize={true} className={s.card}
-  
-                            />)
-}
-						</div>
+            <Result type={result} />
+            <ArrowChoice side={turn} />
+            <div className={s.playerOne}>
+                    <PlayerBoard player={1} cards={player1} onCardChosen={ chooseCard}  />
+            </div>
             <div className={s.board}>
-                <div className={s.boardPlate}>1</div>
-                <div className={s.boardPlate}>2</div>
-                <div className={s.boardPlate}>3</div>
-                <div className={s.boardPlate}>4</div>
-                <div className={s.boardPlate}>5</div>
-                <div className={s.boardPlate}>6</div>
-                <div className={s.boardPlate}>7</div>
-                <div className={s.boardPlate}>8</div>
-                <div className={s.boardPlate}>9</div>
+                {
+                    board.map( item => (
+                        <div key={item.position}
+                        className={s.boardPlate} 
+                        onClick={ () => { !item.card && handleClickBoardPlate(item.position);}}
+                        >
+                            {
+                                item.card && <PokemonCard {...item.card} isActive minimize />
+                            }
+                        </div>
+                    ))
+                }
+            </div>
+            <div className={s.playerTwo}>
+                <PlayerBoard player={2} cards={player2} onCardChosen={ chooseCard} />
             </div>
         </div>
     );

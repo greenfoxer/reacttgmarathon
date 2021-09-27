@@ -1,0 +1,50 @@
+.wrapper {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 46%;
+}
+
+.root {
+    background-color: bisque;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: calc(100vw / 1.7);
+    position: relative;
+}
+
+.playerOne {
+    background-color: #a8caea;
+    position: absolute;
+    top: 2vw;
+    left: 3vw;
+    right: 3vw;
+    width: auto;
+    height: 42%;
+}
+
+.playerTwo {
+    background-color: #d998b2;
+    position: absolute;
+    bottom: 2vw;
+    left: 3vw;
+    right: 3vw;
+    width: auto;
+    height: 42%;
+}
+
+.flex {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.origin {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}

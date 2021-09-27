@@ -24,6 +24,7 @@ const StartPage = ({onPageChange}) =>{
     const pickCard = (objectId) => {
         const objTosend = cards[objectId];
         gameContext.onPokemonAdd(objectId,objTosend);
+        
         setCards( (prevState) => ({
             ...prevState,
             [objectId] : {
@@ -36,9 +37,9 @@ const StartPage = ({onPageChange}) =>{
         <React.Fragment>
         <div className={sComp.wrapper}>
             <button onClick={onClickButton}
-                disabled={Object.keys(gameContext.pokemons).length < 5 }
+                disabled={Object.keys(gameContext.player1).length < 5 }
             >
-                Add pokemon to deck!
+                START THE GAME!
             </button>
         </div>
         <Layout title="Pokemons" colorBg="SkyBlue">
@@ -47,7 +48,7 @@ const StartPage = ({onPageChange}) =>{
                 Object.entries(cards).map(([key,item]) => <PokemonCard key={key} objectId={key}
                     id={item.id} name={item.name} type={item.type} img={item.img} values={item.values}
                     pickCard={ () =>{
-                        if(Object.keys(gameContext.pokemons).length < 5 || item.isSelected)
+                        if(Object.keys(gameContext.player1).length < 5 || item.isSelected)
                         pickCard(key);}} isActive={true} isSelected={item.isSelected}
                     className={sComp.origin}
                     />)

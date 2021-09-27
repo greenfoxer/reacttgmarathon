@@ -7,7 +7,9 @@ import {useState} from 'react';
 
 const GamePage = () => {
     const match = useRouteMatch();
-    const [choosenPokemons, setChosenPokemons] = useState({});
+    const [player1Pokemons, setChosenPokemons] = useState({});
+
+    const [player2Pokemons, setPlayer2Pokemons] = useState([]);
     const pushPokemonToGame = (key, item) => {
         setChosenPokemons( prevState =>{
             if (prevState[key])
@@ -19,14 +21,23 @@ const GamePage = () => {
             return { ...prevState, [key] : item}
         });
     }
+    const player2SetPokemons = (deck) => {
+        setPlayer2Pokemons(prevState => deck);
+    }
     const cleanPokemons = () => {
         setChosenPokemons(prevstate => { return Object(); })
+        setPlayer2Pokemons(prevState => { return []; });
     };
+    const [winner,setWinner] = useState(0);
     return (
         <PokemonContext.Provider value={{
-            pokemons : choosenPokemons,
+            player1 : player1Pokemons,
+            player2 : player2Pokemons,
             onPokemonAdd : pushPokemonToGame,
-            clean : cleanPokemons
+            player2Set : player2SetPokemons,
+            clean : cleanPokemons,
+            winner : winner,
+            setWinner : setWinner
         }
         }>
             <Switch>
