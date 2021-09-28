@@ -1,15 +1,12 @@
 import s from './style.module.css';
-import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './components/PlayerBoard';
 import ArrowChoice from './components/ArrowChoice';
 import Result from './components/Result';
-
+import {useEffect, useState} from 'react'
 import { useSelector } from 'react-redux';
-import { selectGame } from '../../../../store/game';
-import { gameMethods } from '../../../../store/game';
+import { selectGame , gameMethods} from '../../../../store/game';
 import { useDispatch } from 'react-redux';
 
 const counterWin = (board, player1, player2 ) => {

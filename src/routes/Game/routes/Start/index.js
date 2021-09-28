@@ -3,23 +3,19 @@ import Layout from './../../../../components/Layout';
 import PokemonCard from "./../../../../components/PokemonCard";
 import sComp from "./style.module.css";
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectGame , gameMethods} from '../../../../store/game';
 import { selectCards, getPokemonsAsync } from '../../../../store/cards';
-import { useDispatch } from 'react-redux';
 
 const StartPage = ({onPageChange}) =>{
     const gameContext = useSelector(selectGame);
     const cardsContext = useSelector(selectCards);
-    console.log(cardsContext);
     const dispatch = useDispatch();
     const history = useHistory();
     const [cards, setCards] = useState(cardsContext.deck);
 
     useEffect(() =>{ 
-        //pokemonContext.GetAllPokemons(setCards); 
         dispatch(getPokemonsAsync());
-        //return () => {pokemonContext.OffPokemonSocket();}
     }, []);
     
     useEffect(() => {

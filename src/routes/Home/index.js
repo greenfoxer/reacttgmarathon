@@ -1,20 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Header from './../../components/Header';
 import Layout from './../../components/Layout';
 
 import BgImage from './../../Assets/bg3.jpg';
-import { plusAction, selectCount } from '../../store/counter';
 
 const HomePage = ({onPageChange}) =>{
-  const count = useSelector(selectCount);
-
-  const dispatch = useDispatch();
-
-  //console.log(count);
   const  handleClickButton = (page) => {
-    //dispatch(plusAction(1));
     onPageChange && onPageChange(page);
   };
   return (

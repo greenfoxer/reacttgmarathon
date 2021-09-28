@@ -4,8 +4,7 @@ import s from './style.module.css';
 import cn from 'classnames';
 import PokemonCard from "../../../../components/PokemonCard";
 import { useSelector } from "react-redux";
-import { selectGame } from '../../../../store/game';
-import { gameMethods } from '../../../../store/game';
+import { selectGame, gameMethods } from '../../../../store/game';
 import { addPokemon } from "../../../../store/cards";
 import { useDispatch } from 'react-redux';
 
@@ -35,15 +34,13 @@ const FinishPage = () => {
         console.log('key',key);
         setPlayer2( prevState => {
             return prevState.reduce((acc, item) =>{
-                console.log('item',item);
-                console.log('acc',acc);
-                item.isSelected = false;
-                if( item.id === key)
+                const newItem = { ...item, isSelected : false};
+                if( newItem.id === key)
                 {
                     setSelectedCard(item);
-                    item.isSelected = true;
+                    newItem.isSelected = true;
                 }
-                acc.push(item);
+                acc.push(newItem);
                 return acc;
             },[]);
         })

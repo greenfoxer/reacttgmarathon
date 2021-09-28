@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import FirebaseClass from "../Services/firebase";
 
 export const slice = createSlice({
     name: 'game',
@@ -11,10 +10,8 @@ export const slice = createSlice({
     },
     reducers: {
             onPokemonAdd: (state,action) => {
-                const {key , value} = action.payload
-                console.log("action" , key, value);
+                const {key , value} = action.payload;
                 let modP1 = state.player1;
-                console.log('mod', modP1);
                 if (modP1[key])
                 {
                     const copyState = {...state.player1};
