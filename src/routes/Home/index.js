@@ -5,12 +5,14 @@ import Header from './../../components/Header';
 import Layout from './../../components/Layout';
 
 import BgImage from './../../Assets/bg3.jpg';
-import { plusAction } from '../../store/counter';
+import { plusAction, selectCount } from '../../store/counter';
 
 const HomePage = ({onPageChange}) =>{
-  const count = useSelector((state) => state.value);
+  const count = useSelector(selectCount);
+
   const dispatch = useDispatch();
-  console.log(count);
+
+  //console.log(count);
   const  handleClickButton = (page) => {
     //dispatch(plusAction(1));
     onPageChange && onPageChange(page);
