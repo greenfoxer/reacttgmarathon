@@ -1,0 +1,18 @@
+.buttonChange {
+    right: 0%;
+    position: absolute;
+    background-color: white;
+    color: black;
+}
+.buttonChange:hover{
+    border : none;
+}
+.buttonChange:active{
+    border : none;
+}
+.buttonChange,.buttonChange:visited{
+    border : none;
+}
+.wrapper {
+    grid-auto-columns: auto auto;
+}
