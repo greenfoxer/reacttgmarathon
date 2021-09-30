@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import LoginForm from "../LoginForm";
 import Menu from "../Menu";
 import Modal from "../Modal";
 import NavBar from "../NavBar";
@@ -12,6 +13,9 @@ const MenuHeader = (bgActive) => {
     const handleClickLogin = () => {
         setIsOpenModal(prevState => !prevState);
     }
+    const handleSubmitLoginForm = (data) => {
+        console.log(data);
+    }
     return(
         <React.Fragment>
             <Menu onMenuStateChange={onMenuStateChange} isMenuShowed={isMenuOpened} />
@@ -22,7 +26,7 @@ const MenuHeader = (bgActive) => {
 
             <Modal isOpen={isOpenModal} title='Login...'
                     onCloseModal={handleClickLogin}>
-                SomeTextHere
+                <LoginForm onSubmit={handleSubmitLoginForm}/>
             </Modal>
         </React.Fragment>
     )
