@@ -30,10 +30,8 @@ const firebaseConfig = {
       this.database.ref('pokemons').off();
     }
 
-    GetAllPokemons = async (callBack) =>{
-      return await this.database.ref('pokemons').once('value').then( snapshot => {
-        callBack && callBack(snapshot.val());
-      });
+    GetAllPokemons = async () =>{
+      return await this.database.ref('pokemons').once('value').then( snapshot => snapshot.val());
     }
 
     UpdatePokemonById = (id, update ) =>
@@ -47,4 +45,6 @@ const firebaseConfig = {
     }
   }
 
-  export default Firebase;
+  const FirebaseClass = new Firebase();
+
+  export default FirebaseClass;

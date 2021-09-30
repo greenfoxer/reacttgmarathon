@@ -1,29 +1,33 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect} from 'react'
 import Layout from './../../../../components/Layout';
 import PokemonCard from "./../../../../components/PokemonCard";
 import sComp from "./style.module.css";
-import { FireBaseContext } from './../../../../contexts/FirebaseContext';
-import { PokemonContext } from '../../../../contexts/PokemonContext';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectGame , gameMethods} from '../../../../store/game';
+import { selectCards, getPokemonsAsync } from '../../../../store/cards';
 
 const StartPage = ({onPageChange}) =>{
-    const pokemonContext = useContext(FireBaseContext);
-    const gameContext = useContext(PokemonContext);
+    const gameContext = useSelector(selectGame);
+    const cardsContext = useSelector(selectCards);
+    const dispatch = useDispatch();
     const history = useHistory();
-    const [cards, setCards] = useState({});
+    const [cards, setCards] = useState(cardsContext.deck);
 
     useEffect(() =>{ 
-        pokemonContext.GetPokemonSocket(setCards); 
-
-        return () => {pokemonContext.OffPokemonSocket();}
+        dispatch(getPokemonsAsync());
     }, []);
+    
+    useEffect(() => {
+        setCards(cardsContext.deck);
+    }, [cardsContext])
 
     const onClickButton = () =>{
         history.push('/game/board');
     }
     const pickCard = (objectId) => {
         const objTosend = cards[objectId];
-        gameContext.onPokemonAdd(objectId,objTosend);
+        dispatch(gameMethods.onPokemonAdd({ key : objectId, value : objTosend}));
         
         setCards( (prevState) => ({
             ...prevState,

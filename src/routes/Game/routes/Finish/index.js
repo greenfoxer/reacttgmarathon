@@ -1,14 +1,17 @@
-import React, {useContext, useState} from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { PokemonContext } from "../../../../contexts/PokemonContext";
 import s from './style.module.css';
 import cn from 'classnames';
 import PokemonCard from "../../../../components/PokemonCard";
-import { FireBaseContext } from './../../../../contexts/FirebaseContext';
+import { useSelector } from "react-redux";
+import { selectGame, gameMethods } from '../../../../store/game';
+import { addPokemon } from "../../../../store/cards";
+import { useDispatch } from 'react-redux';
+
 
 const FinishPage = () => {
-    const gameContext = useContext(PokemonContext);
-    const dbContext = useContext(FireBaseContext);
+    const gameContext = useSelector(selectGame);
+    const dispatch = useDispatch();
     const history = useHistory();
     const [selectedCard, setSelectedCard] = useState(null);
 
@@ -22,21 +25,22 @@ const FinishPage = () => {
         if(selectedCard !== null)
         {
             delete selectedCard.isSelected;
-            dbContext.AddNewPokemon(selectedCard)
+            dispatch(addPokemon(selectedCard));
         }
-        gameContext.clean();
+        dispatch(gameMethods.clean());
         history.push('/game');
     }
     const pickCard = (key) => {
+        console.log('key',key);
         setPlayer2( prevState => {
             return prevState.reduce((acc, item) =>{
-                item.isSelected = false;
-                if( item.id === key)
+                const newItem = { ...item, isSelected : false};
+                if( newItem.id === key)
                 {
                     setSelectedCard(item);
-                    item.isSelected = true;
+                    newItem.isSelected = true;
                 }
-                acc.push(item);
+                acc.push(newItem);
                 return acc;
             },[]);
         })

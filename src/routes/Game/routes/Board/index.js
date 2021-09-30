@@ -1,11 +1,13 @@
 import s from './style.module.css';
-import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../contexts/PokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './components/PlayerBoard';
 import ArrowChoice from './components/ArrowChoice';
 import Result from './components/Result';
+import {useEffect, useState} from 'react'
+import { useSelector } from 'react-redux';
+import { selectGame , gameMethods} from '../../../../store/game';
+import { useDispatch } from 'react-redux';
 
 const counterWin = (board, player1, player2 ) => {
     let player1Count = player1.length;
@@ -22,8 +24,8 @@ const counterWin = (board, player1, player2 ) => {
 }
 
 const BoardPage = () => {
-    
-    const gameContext = useContext(PokemonContext);
+    const gameContext = useSelector(selectGame);
+    const dispatch = useDispatch();
     const history = useHistory();
     const [board,setBoard] = useState([]);
     const [player1, setPlayer1] = useState(() => Object.values(gameContext.player1).map(item=>({...item, possession:'blue'})));
@@ -58,7 +60,7 @@ const BoardPage = () => {
             const palyer2Request = await palyer2Response.json();
             setPlayer2(palyer2Request.data.map(item=>({...item, possession:'red'})));
 
-            gameContext.player2Set(palyer2Request.data.map(item=>({...item})));
+            dispatch(gameMethods.player2Set(palyer2Request.data.map(item=>({...item}))));
         };
         getResponse();
 
@@ -102,17 +104,17 @@ const BoardPage = () => {
                 let caption = '';
                 if(count1>count2)
                 {
-                    gameContext.setWinner(1);
+                    dispatch(gameMethods.setWinner(1));
                     caption ='win';
                 }
                 else if (count2 > count1)
                 {
-                    gameContext.setWinner(2);
+                    dispatch(gameMethods.setWinner(2));
                     caption='lose';
                 }
                 else
                 {
-                    gameContext.setWinner(0);
+                    dispatch(gameMethods.setWinner(0));
                     caption = 'draw';
                 }
                 setResult(caption);
