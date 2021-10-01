@@ -5,16 +5,21 @@ import s from './style.module.css'
 function LoginForm({onSubmit}) {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+    const [isSignin, setIsSignin] = useState(true);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         onSubmit && onSubmit({
             email : email,
-            password : password
+            password : password,
+            isSignin : isSignin
         })
         setEmail('');
         setPassword('');
+    }
+    const onClickToggler = () => {
+        setIsSignin(prev => !prev);
     }
     return (
         <form onSubmit={handleSubmit}>
@@ -22,14 +27,18 @@ function LoginForm({onSubmit}) {
             <Input value={password} label={'Password'} name='password' type='password' onChange={ (val) => setPassword(val.target.value)}/>
             <div className={s.wrapper}>
                 <button>
-                    Submit
+                    {
+                        isSignin ? "Sign In" : "Sign Up"
+                    }
                 </button>
-                {/* <button className={s.buttonChange} onClick={console.log("click")}>
-                    Change
-                </button> */}
-                <div onClick={console.log("click")}> 
-                    <span/>
-                </div>
+                <span
+                    className={s.question}
+                    onClick={onClickToggler}
+                    >
+                        {
+                            isSignin ? "Register?" : "Login?"
+                        }
+                </span>
             </div>
         </form>
     )
