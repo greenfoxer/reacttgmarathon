@@ -7,7 +7,7 @@ export const slice = createSlice({
         isLoggedIn : localStorage.getItem('idToke') !== null
     },
     reducers: {
-            login: (state,action) =>  ({
+            signin: (state,action) =>  ({
                     isLoggedIn: action.payload,
                 }),
             signup : (state,action) =>  ({
@@ -50,12 +50,14 @@ const key='AIzaSyBpwM-_LN_TarR1NbNedA5hbeae-nmGaI4'
 
 const authMethods = slice.actions;
 
-export const signUp = (data) => async (dispatch) => {
+export const signIn = (data) => async (dispatch) => {
+    console.log('signUp', data);
     const signInURL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`;
     const result = await auth(signInURL, data);
-    dispatch(authMethods.signup(result));
+    dispatch(authMethods.signin(result));
 }
-export const signIn = (data) => async (dispatch) => {
+export const signUp = (data) => async (dispatch) => {
+    console.log('signIn', data);
     const signUpURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
     const result = await auth(signUpURL, data);
     dispatch(authMethods.signup(result));

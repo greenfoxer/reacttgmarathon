@@ -1,7 +1,5 @@
-import React, {useState} from "react";
-import { NotificationManager } from "react-notifications";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import React, {useEffect, useState} from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, signIn, logOut, signUp } from "../../store/auth";
 
 import LoginForm from "../LoginForm";
@@ -12,7 +10,14 @@ import NavBar from "../NavBar";
 const MenuHeader = (bgActive) => {
     const [isMenuOpened, setMenuOpened] = useState(undefined);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const dispatch = useDispatch();
     const authContext = useSelector(selectAuth)
+    useEffect( () =>{
+        console.log('useEffect');
+        if(authContext.isLoggedIn)
+                setIsOpenModal(prevState => !prevState);
+    },[authContext])
+
     const onMenuStateChange = () => {
         setMenuOpened(prevState => !prevState);
     }
@@ -20,22 +25,23 @@ const MenuHeader = (bgActive) => {
         console.log(authContext.isLoggedIn);
         if(authContext.isLoggedIn)
         {
-            localStorage.removeItem('idToken');
-            window.location.replace('/');
+            dispatch(logOut());
+            //window.location.replace('/');
         }
         else
             setIsOpenModal(prevState => !prevState);
     }
     const handleSubmitLoginForm =  async (data) => {
+        console.log(data);
         if(data.isSignin)
         {
-            signIn(data);
+            dispatch(signIn(data));
             if(authContext.isLoggedIn)
                 setIsOpenModal(prevState => false);
         }
         else
         {
-            signUp(data);
+            dispatch(signUp(data));
             if(authContext.isLoggedIn)
                 setIsOpenModal(prevState => !prevState);
         }
