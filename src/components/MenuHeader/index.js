@@ -57,7 +57,7 @@ const MenuHeader = (bgActive) => {
 
             <Modal isOpen={isOpenModal} title='Auth...'
                     onCloseModal={handleClickLogin}>
-                <LoginForm onSubmit={handleSubmitLoginForm}/>
+                <LoginForm onSubmit={handleSubmitLoginForm} isOpenModal={isOpenModal}/>
             </Modal>
         </React.Fragment>
     )
