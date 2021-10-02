@@ -1,0 +1,17 @@
+.question {
+    background: none;
+    text-transform: none;
+    color: black;
+    cursor: pointer;
+    margin-left: auto;
+    font-size: 1.2rem;
+}
+
+.question:hover {
+    color : #f300b4
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+}
