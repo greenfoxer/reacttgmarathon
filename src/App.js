@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import {NotificationContainer} from 'react-notifications';
+import {useSelector, useDispatch} from 'react-redux';
 
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
@@ -14,10 +15,15 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
+import { selectAuth, getUserAsync } from "./store/auth";
 
 const App = () =>{
   const location = useLocation();
   const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
+
+  const dispatch = useDispatch();
+  const authContext = useSelector(selectAuth);
+  useEffect( ()=>{dispatch(getUserAsync); console.log(selectAuth.currentUser);},[])
   
   return(
     <React.Fragment>

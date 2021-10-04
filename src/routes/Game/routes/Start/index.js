@@ -5,22 +5,24 @@ import sComp from "./style.module.css";
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectGame , gameMethods} from '../../../../store/game';
-import { selectCards, getPokemonsAsync } from '../../../../store/cards';
+import { selectCards, getPokemonsAsync, deck } from '../../../../store/cards';
 
 const StartPage = ({onPageChange}) =>{
     const gameContext = useSelector(selectGame);
     const cardsContext = useSelector(selectCards);
+    const deckCards = useSelector(deck);
     const dispatch = useDispatch();
     const history = useHistory();
-    const [cards, setCards] = useState(cardsContext.deck);
+    const [cards, setCards] = useState(deckCards);
 
     useEffect(() =>{ 
         dispatch(getPokemonsAsync());
     }, []);
     
     useEffect(() => {
-        setCards(cardsContext.deck);
-    }, [cardsContext])
+        console.log('pokemon use effect', deckCards);
+        setCards(deck);
+    }, [deckCards])
 
     const onClickButton = () =>{
         history.push('/game/board');
