@@ -70,7 +70,6 @@ export const hasLocalId = state => state.auth.currentUser?.localId;
 export const isActionProcessing = state => state.auth.isActionProcessing;
 
 export const signIn = (data) => async (dispatch) => {
-    console.log('signIn', data);
     dispatch(authMethods.start());
     const signInURL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`;
     const {result} = await auth(signInURL, data);
@@ -82,7 +81,6 @@ export const signIn = (data) => async (dispatch) => {
     }
 }
 export const signUp = (data) => async (dispatch) => {
-    console.log('signUp', data);
     dispatch(authMethods.start());
     const signUpURL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
     const {result, idToken, localId} = await auth(signUpURL, data);
@@ -116,7 +114,6 @@ const getInfoAsync = async () =>{
 }
 export const getUserAsync = () => async (dispatch) => {
     const userInfo = await getInfoAsync();
-    console.log('getUserAsync', userInfo);
     if(userInfo)
     {
         dispatch(authMethods.getUser(userInfo));

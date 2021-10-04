@@ -47,8 +47,6 @@ export const addPokemon = (pokemon) => async (dispatch) => {
 }
 
 export const addPokemonAPI = (pokemon, userInfo) => async (dispatch) => {
-    console.log(pokemon);
-    console.log(userInfo);
     FirebaseClass.AddNewPokemonAPI(pokemon, userInfo);
 }
 

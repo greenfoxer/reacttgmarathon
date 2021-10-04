@@ -49,7 +49,7 @@ const firebaseConfig = {
         method : 'POST',
         body : JSON.stringify({...pokemon}),
       }
-      const response = await fetch(`${firebaseConfig.databaseURL}/${userInfo.localId}/pokemons.json?auth=${userInfo.idToken}`, data)
+      await fetch(`${firebaseConfig.databaseURL}/${userInfo.localId}/pokemons.json?auth=${userInfo.idToken}`, data)
     }
 
     GetAllPokemonsAPI = async (localId) => {
@@ -69,7 +69,6 @@ const firebaseConfig = {
         return false;
       else
       {
-      console.log(response);
         return response.users[0];
       }
     }

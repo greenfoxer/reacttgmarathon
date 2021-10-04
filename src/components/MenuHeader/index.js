@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  signIn, logOut, signUp, isLoggedIn, getUserAsync } from "../../store/auth";
-import { NotificationManager } from "react-notifications";
+import {  signIn, logOut, signUp, isLoggedIn } from "../../store/auth";
 
 import LoginForm from "../LoginForm";
 import Menu from "../Menu";
@@ -22,7 +21,6 @@ const MenuHeader = (bgActive) => {
         setMenuOpened(prevState => !prevState);
     }
     const handleClickLogin = () => {
-        console.log('uthContext.isLoggedIn',loggedIn);
         if(loggedIn ===true )
         {
             dispatch(logOut());
@@ -32,13 +30,11 @@ const MenuHeader = (bgActive) => {
             setIsOpenModal(prevState => !prevState);
     }
     const handleSubmitLoginForm =  async (data) => {
-        console.log(data);
         if(data.isSignin)
         {
             dispatch(signIn(data));
             if(loggedIn === true)
             {
-                console.log('here login');
                 setIsOpenModal(prevState => false);
             }
         }
@@ -47,7 +43,6 @@ const MenuHeader = (bgActive) => {
             dispatch(signUp(data));
             if(loggedIn === true)
             {
-                console.log('here signup');
                 setIsOpenModal(prevState => false);
             }
         }

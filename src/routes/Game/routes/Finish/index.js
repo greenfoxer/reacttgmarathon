@@ -5,7 +5,7 @@ import cn from 'classnames';
 import PokemonCard from "../../../../components/PokemonCard";
 import { useSelector } from "react-redux";
 import { selectGame, gameMethods } from '../../../../store/game';
-import { addPokemon,addPokemonAPI } from "../../../../store/cards";
+import { addPokemonAPI } from "../../../../store/cards";
 import { useDispatch } from 'react-redux';
 import { hasLocalId } from "../../../../store/auth";
 

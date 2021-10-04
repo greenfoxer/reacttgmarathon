@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import {NotificationContainer} from 'react-notifications';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
@@ -15,7 +15,7 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
-import { getUserAsync,isLoggedIn } from "./store/auth";
+import { getUserAsync } from "./store/auth";
 import User from "./routes/User";
 
 const App = () =>{
@@ -23,21 +23,11 @@ const App = () =>{
   const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
 
   const dispatch = useDispatch();
-  const hasUser = useSelector(isLoggedIn);
   
   useEffect( ()=>{ 
     dispatch(getUserAsync());
   }, []);
   
-  /* useEffect( ()=>{ 
-      dispatch(getUserAsync());
-  }, [hasUser]);
- */
-
- /*  if(isAuthProcessing){
-    return 'Loading...';
-  } */
-
   return(
     <React.Fragment>
       <Switch>

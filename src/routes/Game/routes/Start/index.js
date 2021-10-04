@@ -5,13 +5,11 @@ import sComp from "./style.module.css";
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectGame , gameMethods} from '../../../../store/game';
-import { getPokemonsAsync, deck, isLoading } from '../../../../store/cards';
+import { getPokemonsAsync, deck } from '../../../../store/cards';
 import {isActionProcessing} from '../../../../store/auth';
 
 const StartPage = ({onPageChange}) =>{
     const gameContext = useSelector(selectGame);
-
-    const isDataFetching = useSelector(isLoading);
 
     const isAuthProcessing = useSelector(isActionProcessing);
     const deckCards = useSelector(deck);
@@ -20,7 +18,6 @@ const StartPage = ({onPageChange}) =>{
     const [cards, setCards] = useState(deckCards);
 
     const updatePokemons = () => {
-        console.log('start loading pokemons',isAuthProcessing);
         if(isAuthProcessing === false)
             dispatch(getPokemonsAsync());
     };
