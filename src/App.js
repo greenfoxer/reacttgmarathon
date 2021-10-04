@@ -15,16 +15,28 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
-import { selectAuth, getUserAsync } from "./store/auth";
+import { getUserAsync,isLoggedIn } from "./store/auth";
 
 const App = () =>{
   const location = useLocation();
   const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
 
   const dispatch = useDispatch();
-  const authContext = useSelector(selectAuth);
-  useEffect( ()=>{dispatch(getUserAsync); console.log(selectAuth.currentUser);},[])
+  const hasUser = useSelector(isLoggedIn);
   
+  useEffect( ()=>{ 
+    dispatch(getUserAsync());
+  }, []);
+  
+  /* useEffect( ()=>{ 
+      dispatch(getUserAsync());
+  }, [hasUser]);
+ */
+
+ /*  if(isAuthProcessing){
+    return 'Loading...';
+  } */
+
   return(
     <React.Fragment>
       <Switch>

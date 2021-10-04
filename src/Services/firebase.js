@@ -53,8 +53,7 @@ const firebaseConfig = {
     }
 
     GetAllPokemonsAPI = async (localId) => {
-        const data = await fetch(`${firebaseConfig.databaseURL}/${localId}/pokemons.json`).then(res => res.json());
-        console.log('pokemons', data);
+        return await fetch(`${firebaseConfig.databaseURL}/${localId}/pokemons.json`).then(res => res.json());
     }
 
     GetUserInfoAPI = async (idToken) => {

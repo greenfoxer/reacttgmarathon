@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  signIn, logOut, signUp, isLoggedIn } from "../../store/auth";
+import {  signIn, logOut, signUp, isLoggedIn, getUserAsync } from "../../store/auth";
 import { NotificationManager } from "react-notifications";
 
 import LoginForm from "../LoginForm";
@@ -38,8 +38,8 @@ const MenuHeader = (bgActive) => {
             dispatch(signIn(data));
             if(loggedIn === true)
             {
+                console.log('here login');
                 setIsOpenModal(prevState => false);
-                NotificationManager.success("Login success!");
             }
         }
         else
@@ -47,8 +47,8 @@ const MenuHeader = (bgActive) => {
             dispatch(signUp(data));
             if(loggedIn === true)
             {
+                console.log('here signup');
                 setIsOpenModal(prevState => false);
-                NotificationManager.success("Success!");
             }
         }
     }

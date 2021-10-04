@@ -16,12 +16,11 @@ export const slice = createSlice({
             }),
             signin: (state,action) =>  ({ ...state,
                     isLoggedIn: action.payload,
-                    isActionProcessing : false
                 }),
             signup : (state,action) =>  ({ ...state,
                 isLoggedIn: action.payload,
             }),
-            logout : (state,action) =>  ({ ...state,
+            logout : (state) =>  ({ ...state,
                 currentUser: Object(),
                 isLoggedIn: false,
                 isActionProcessing : false,
@@ -68,6 +67,8 @@ export const isLoggedIn = state => state.auth.isLoggedIn;
 
 export const hasLocalId = state => state.auth.currentUser?.localId;
 
+export const isActionProcessing = state => state.auth.isActionProcessing;
+
 export const signIn = (data) => async (dispatch) => {
     console.log('signIn', data);
     dispatch(authMethods.start());
@@ -75,8 +76,10 @@ export const signIn = (data) => async (dispatch) => {
     const {result} = await auth(signInURL, data);
     dispatch(authMethods.signin(result));
     if(result)
+    {
+        dispatch(getUserAsync());
         NotificationManager.success("Login success!");
-    dispatch(getUserAsync);
+    }
 }
 export const signUp = (data) => async (dispatch) => {
     console.log('signUp', data);
@@ -87,16 +90,17 @@ export const signUp = (data) => async (dispatch) => {
     if(result){
         const startDeck = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json());
         startDeck.data.map( card =>{
-            FirebaseClass.AddNewPokemonAPI(card, {idToken, localId});
+            return FirebaseClass.AddNewPokemonAPI(card, {idToken, localId});
         });
 
         NotificationManager.success("Success!");
+        dispatch(getUserAsync());
     }
-    dispatch(authMethods.end());
 }
 export const logOut = () => async (dispatch) => {
     localStorage.removeItem('idToken');
     dispatch(authMethods.logout());
+    dispatch(getUserAsync());
 }
 const getInfoAsync = async () =>{
     const idToken = localStorage.getItem('idToken');
@@ -110,8 +114,7 @@ const getInfoAsync = async () =>{
     else
         return false;
 }
-export const getUserAsync = async (dispatch) => {
-    dispatch(authMethods.start());
+export const getUserAsync = () => async (dispatch) => {
     const userInfo = await getInfoAsync();
     console.log('getUserAsync', userInfo);
     if(userInfo)
@@ -124,6 +127,12 @@ export const getUserAsync = async (dispatch) => {
         dispatch(authMethods.logout());
     }
 }
+
+export const getUserSync = () => (dispatch) => {
+    dispatch(authMethods.start());
+    dispatch(getUserAsync());  
+}
+
 
 export const selectAuth = state => state.auth;
 

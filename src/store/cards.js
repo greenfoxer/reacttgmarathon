@@ -31,16 +31,16 @@ export const slice = createSlice({
 
 const cardsMethods = slice.actions;
 
-export const getPokemonsUpdateAsync = () => async (dispatch,getState) => {
+export const getPokemonsAsync = () => async (dispatch,getState) => {
     const localId = hasLocalId(getState());
     dispatch(cardsMethods.fetchPokemons);
     const data = await FirebaseClass.GetAllPokemonsAPI(localId);
     dispatch(cardsMethods.fetchPokemonsResolve(data));
 }
 
-export const getPokemonsAsync = () => (dispatch) => {
+/* export const getPokemonsAsync = () => (dispatch) => {
     dispatch(getPokemonsUpdateAsync());
-}
+} */
 
 export const addPokemon = (pokemon) => async (dispatch) => {
     FirebaseClass.AddNewPokemon(pokemon, () => dispatch(cardsMethods.addNewPokemon()));
@@ -48,5 +48,6 @@ export const addPokemon = (pokemon) => async (dispatch) => {
 
 export const selectCards = state => state.cards;
 export const deck = state => state.cards?.deck;
+export const isLoading = state => state.cards.isLoading;
 
 export default slice.reducer;
