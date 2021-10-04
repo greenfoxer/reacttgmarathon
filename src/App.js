@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
 import { getUserAsync,isLoggedIn } from "./store/auth";
+import User from "./routes/User";
 
 const App = () =>{
   const location = useLocation();
@@ -50,6 +51,7 @@ const App = () =>{
                 <Route path="/home" component={HomePage}  />
                 <PrivateRoute path="/game" component={GamePage} />
                 <PrivateRoute path="/about" component={AboutPage} />
+                <PrivateRoute path="/user" component={User} />
                 <Route path="/contacts" component={ContactsPage} />
                 <Route render={ () => ( <Redirect to='/404'/>)} />
               </Switch>

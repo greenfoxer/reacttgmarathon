@@ -46,6 +46,12 @@ export const addPokemon = (pokemon) => async (dispatch) => {
     FirebaseClass.AddNewPokemon(pokemon, () => dispatch(cardsMethods.addNewPokemon()));
 }
 
+export const addPokemonAPI = (pokemon, userInfo) => async (dispatch) => {
+    console.log(pokemon);
+    console.log(userInfo);
+    FirebaseClass.AddNewPokemonAPI(pokemon, userInfo);
+}
+
 export const selectCards = state => state.cards;
 export const deck = state => state.cards?.deck;
 export const isLoading = state => state.cards.isLoading;

@@ -1,0 +1,11 @@
+.wrap{
+    font-size: 1.5rem;
+}
+.key{
+    margin-top: 2px;
+    color : #f300b4
+}
+.rightButton{
+    position: relative;
+    left: 70%;
+}
