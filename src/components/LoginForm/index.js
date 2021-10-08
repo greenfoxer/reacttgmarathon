@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from '../Input'
 import s from './style.module.css'
 
-function LoginForm({onSubmit}) {
+function LoginForm({onSubmit, isOpenModal}) {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
     const [isSignin, setIsSignin] = useState(true);
@@ -18,6 +18,13 @@ function LoginForm({onSubmit}) {
         setEmail('');
         setPassword('');
     }
+
+
+    useEffect( () => {
+        setEmail('');
+        setPassword('');
+    }, [isOpenModal])
+
     const onClickToggler = () => {
         setIsSignin(prev => !prev);
     }

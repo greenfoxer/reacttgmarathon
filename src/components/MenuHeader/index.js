@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, signIn, logOut, signUp } from "../../store/auth";
+import {  signIn, logOut, signUp, isLoggedIn } from "../../store/auth";
 
 import LoginForm from "../LoginForm";
 import Menu from "../Menu";
@@ -11,45 +11,46 @@ const MenuHeader = (bgActive) => {
     const [isMenuOpened, setMenuOpened] = useState(undefined);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const dispatch = useDispatch();
-    const authContext = useSelector(selectAuth)
+    const loggedIn = useSelector(isLoggedIn)
     useEffect( () =>{
-        console.log('useEffect');
-        if(authContext.isLoggedIn)
-                setIsOpenModal(prevState => !prevState);
-    },[authContext])
+        if(loggedIn === true)
+                setIsOpenModal(prevState => false);
+    },[loggedIn])
 
     const onMenuStateChange = () => {
         setMenuOpened(prevState => !prevState);
     }
     const handleClickLogin = () => {
-        console.log(authContext.isLoggedIn);
-        if(authContext.isLoggedIn)
+        if(loggedIn ===true )
         {
             dispatch(logOut());
             //window.location.replace('/');
         }
-        else
+        else if( loggedIn === false)
             setIsOpenModal(prevState => !prevState);
     }
     const handleSubmitLoginForm =  async (data) => {
-        console.log(data);
         if(data.isSignin)
         {
             dispatch(signIn(data));
-            if(authContext.isLoggedIn)
+            if(loggedIn === true)
+            {
                 setIsOpenModal(prevState => false);
+            }
         }
         else
         {
             dispatch(signUp(data));
-            if(authContext.isLoggedIn)
-                setIsOpenModal(prevState => !prevState);
+            if(loggedIn === true)
+            {
+                setIsOpenModal(prevState => false);
+            }
         }
     }
     return(
         <React.Fragment>
             <Menu onMenuStateChange={onMenuStateChange} isMenuShowed={isMenuOpened} />
-            <NavBar isLoggedIn={authContext.isLoggedIn}
+            <NavBar isLoggedIn={loggedIn}
                     onMenuStateChange={onMenuStateChange} 
                     bgActive={bgActive} 
                     isMenuShowed={isMenuOpened}
@@ -57,7 +58,7 @@ const MenuHeader = (bgActive) => {
 
             <Modal isOpen={isOpenModal} title='Auth...'
                     onCloseModal={handleClickLogin}>
-                <LoginForm onSubmit={handleSubmitLoginForm}/>
+                <LoginForm onSubmit={handleSubmitLoginForm} isOpenModal={isOpenModal}/>
             </Modal>
         </React.Fragment>
     )

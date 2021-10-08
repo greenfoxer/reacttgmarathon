@@ -43,6 +43,35 @@ const firebaseConfig = {
       const newKey = this.database.ref().child('pokemons').push().key;
       this.database.ref('pokemons/' + newKey).set(pokemon).then( () => { callback && callback() });
     }
+
+    AddNewPokemonAPI = async (pokemon, userInfo) => {
+      const data = {
+        method : 'POST',
+        body : JSON.stringify({...pokemon}),
+      }
+      await fetch(`${firebaseConfig.databaseURL}/${userInfo.localId}/pokemons.json?auth=${userInfo.idToken}`, data)
+    }
+
+    GetAllPokemonsAPI = async (localId) => {
+        return await fetch(`${firebaseConfig.databaseURL}/${localId}/pokemons.json`).then(res => res.json());
+    }
+
+    GetUserInfoAPI = async (idToken) => {
+      const data = {
+        method : 'POST',
+        body : JSON.stringify({
+          idToken : idToken
+        }),
+      }
+      const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebaseConfig.apiKey}`, data)
+        .then(res => res.json());
+      if(response.hasOwnProperty('error'))
+        return false;
+      else
+      {
+        return response.users[0];
+      }
+    }
   }
 
   const FirebaseClass = new Firebase();

@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import {NotificationContainer} from 'react-notifications';
+import {useDispatch} from 'react-redux';
 
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
@@ -14,10 +15,18 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
+import { getUserAsync } from "./store/auth";
+import User from "./routes/User";
 
 const App = () =>{
   const location = useLocation();
   const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
+
+  const dispatch = useDispatch();
+  
+  useEffect( ()=>{ 
+    dispatch(getUserAsync());
+  }, []);
   
   return(
     <React.Fragment>
@@ -32,6 +41,7 @@ const App = () =>{
                 <Route path="/home" component={HomePage}  />
                 <PrivateRoute path="/game" component={GamePage} />
                 <PrivateRoute path="/about" component={AboutPage} />
+                <PrivateRoute path="/user" component={User} />
                 <Route path="/contacts" component={ContactsPage} />
                 <Route render={ () => ( <Redirect to='/404'/>)} />
               </Switch>

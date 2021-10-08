@@ -5,8 +5,9 @@ import cn from 'classnames';
 import PokemonCard from "../../../../components/PokemonCard";
 import { useSelector } from "react-redux";
 import { selectGame, gameMethods } from '../../../../store/game';
-import { addPokemon } from "../../../../store/cards";
+import { addPokemonAPI } from "../../../../store/cards";
 import { useDispatch } from 'react-redux';
+import { hasLocalId } from "../../../../store/auth";
 
 
 const FinishPage = () => {
@@ -14,6 +15,7 @@ const FinishPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [selectedCard, setSelectedCard] = useState(null);
+    const localId = useSelector(hasLocalId);
 
     const player1 = gameContext.player1;
     const [player2,setPlayer2] = useState(gameContext.player2);
@@ -25,13 +27,12 @@ const FinishPage = () => {
         if(selectedCard !== null)
         {
             delete selectedCard.isSelected;
-            dispatch(addPokemon(selectedCard));
+            dispatch(addPokemonAPI(selectedCard, { localId : localId, idToken : localStorage.getItem('idToken') }));
         }
         dispatch(gameMethods.clean());
         history.push('/game');
     }
     const pickCard = (key) => {
-        console.log('key',key);
         setPlayer2( prevState => {
             return prevState.reduce((acc, item) =>{
                 const newItem = { ...item, isSelected : false};

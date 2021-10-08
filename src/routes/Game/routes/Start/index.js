@@ -5,22 +5,36 @@ import sComp from "./style.module.css";
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectGame , gameMethods} from '../../../../store/game';
-import { selectCards, getPokemonsAsync } from '../../../../store/cards';
+import { getPokemonsAsync, deck } from '../../../../store/cards';
+import {isActionProcessing} from '../../../../store/auth';
 
 const StartPage = ({onPageChange}) =>{
     const gameContext = useSelector(selectGame);
-    const cardsContext = useSelector(selectCards);
+
+    const isAuthProcessing = useSelector(isActionProcessing);
+    const deckCards = useSelector(deck);
     const dispatch = useDispatch();
     const history = useHistory();
-    const [cards, setCards] = useState(cardsContext.deck);
+    const [cards, setCards] = useState(deckCards);
+
+    const updatePokemons = () => {
+        if(isAuthProcessing === false)
+            dispatch(getPokemonsAsync());
+    };
 
     useEffect(() =>{ 
-        dispatch(getPokemonsAsync());
+        updatePokemons();
     }, []);
+
+    useEffect(() =>{ 
+        updatePokemons();
+    }, [isAuthProcessing]);
     
     useEffect(() => {
-        setCards(cardsContext.deck);
-    }, [cardsContext])
+
+        setCards(deckCards);
+
+    }, [deckCards])
 
     const onClickButton = () =>{
         history.push('/game/board');
@@ -37,6 +51,7 @@ const StartPage = ({onPageChange}) =>{
             }
         }));
     }
+
     return(
         <React.Fragment>
         <div className={sComp.wrapper}>
