@@ -24,6 +24,7 @@ const StartPage = ({onPageChange}) =>{
 
     useEffect(() =>{ 
         updatePokemons();
+        dispatch(gameMethods.clean());
     }, []);
 
     useEffect(() =>{ 
