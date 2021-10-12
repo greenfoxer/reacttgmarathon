@@ -4,15 +4,14 @@ import PokemonCard from '../../../../../../components/PokemonCard';
 import s from './style.module.css';
 
 const PlayerBoard = ({player, cards, onCardChosen}) => {
-    const [isSelected, setIsSelected] = useState(null);
     return (
         <React.Fragment>
             {
                 cards.map( (item, key) => {return (
-                <div key={key} className={cn(s.cardBoard, {[s.selected] : isSelected === item.id})}
+                <div key={key} className={cn(s.cardBoard, {[s.selected] : item.isSelected === true})}
                     onClick={ () => { 
-                        if(onCardChosen && onCardChosen({player, ...item}))
-                            setIsSelected(item.id); 
+                        onCardChosen && onCardChosen({player, ...item});
+                             
                     }}
                 >
                     <PokemonCard key={key}

@@ -15,19 +15,26 @@ import sComp from './style.module.css';
 import Footer from "./components/Footer";
 import cn from 'classnames'
 import PrivateRoute from "./components/PrivateRoute";
-import { getUserAsync } from "./store/auth";
+import { getUserAsync, isLoggedIn } from "./store/auth";
 import User from "./routes/User";
+import { useSelector } from "react-redux";
 
 const App = () =>{
   const location = useLocation();
   const isMainPage = location.pathname === '/' ||location.pathname === '/home' ||location.pathname === '/game/board' ;
 
   const dispatch = useDispatch();
+
+  const hasUser = useSelector(isLoggedIn);
   
   useEffect( ()=>{ 
     dispatch(getUserAsync());
   }, []);
   
+  useEffect( ()=>{ 
+    dispatch(getUserAsync());
+}, [hasUser]);
+
   return(
     <React.Fragment>
       <Switch>

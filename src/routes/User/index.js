@@ -14,13 +14,17 @@ const User = () => {
     return(
         <Layout title='User information: ' urlBg={BgImage}>
             <table className={s.wrap}>
+                <thead>
                 <tr><th align='left'>KEY</th><th align='left'>VALUE</th></tr>
+                </thead>
+                <tbody>
                 {
                     Object.entries(userInfo.currentUser).map( (item, key) => (
                         <tr key={key}>
                             <td className={s.key}>{item[0]}</td><td>{JSON.stringify(item[1])}</td>
                         </tr>))
                 }
+                </tbody>
             </table>
             <button className={s.rightButton} onClick={onLogoutClick}>
                 LOG OUT
